@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Stage, Layer } from "react-konva";
+import "./style.scss";
+import "antd/dist/antd.css";
 import ImageTransformer from "./components/ImageTransformer";
+import Footer from "./components/Footer";
+import Dialog from "./components/Dialog";
 export default function App() {
   const [didTouchStage, setDidTouchStage] = useState(false);
   const imageUrl =
@@ -10,20 +14,34 @@ export default function App() {
     setDidTouchStage(didTouchStage);
   }
   return (
-    <Stage
-      onMouseDown={checkDeselect}
-      onTouchStart={checkDeselect}
-      width={window.innerWidth}
-      height={window.innerHeight}
-    >
-      <Layer>
-        <ImageTransformer
-          url={imageUrl}
-          didTouchStage={didTouchStage}
-          width={100}
-          height={100}
-        />
-      </Layer>
-    </Stage>
+    <>
+      <Dialog />
+      <Stage
+        onMouseDown={checkDeselect}
+        onTouchStart={checkDeselect}
+        width={window.innerWidth}
+        height={window.innerHeight - 40}
+      >
+        <Layer>
+          <ImageTransformer
+            url={imageUrl}
+            didTouchStage={didTouchStage}
+            width={100}
+            height={100}
+            x={300}
+            y={30}
+          />
+          <ImageTransformer
+            url={imageUrl}
+            didTouchStage={didTouchStage}
+            x={100}
+            y={200}
+            width={100}
+            height={100}
+          />
+        </Layer>
+      </Stage>
+      <Footer />
+    </>
   );
 }
