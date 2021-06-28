@@ -1,7 +1,7 @@
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
 import DialogReducer from "./reducers/DialogReducer";
-const store = createStore(
-  DialogReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const reducer = combineReducers({
+  DialogReducer
+});
+const store = createStore(reducer);
 export default store;
