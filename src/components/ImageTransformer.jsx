@@ -13,7 +13,6 @@ export default function Index({ url, didTouchStage, ...rest }) {
   useEffect(() => {
     if (isSelected) {
       transformerRef.current.nodes([imageRef.current]);
-      transformerRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
   useEffect(() => {
