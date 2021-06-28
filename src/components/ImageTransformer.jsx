@@ -1,7 +1,7 @@
 import useImage from "use-image";
-import { Image } from "react-konva";
-import { useEffect, useState, useRef, Transformer } from "react";
-export default function Index({ url, ...rest }) {
+import { Image, Transformer } from "react-konva";
+import { useEffect, useState, useRef } from "react";
+export default function Index({ url, didTouchStage, ...rest }) {
   const [image] = useImage(url);
   const transformerRef = useRef();
   const imageRef = useRef();
@@ -12,8 +12,15 @@ export default function Index({ url, ...rest }) {
   }
   useEffect(() => {
     if (isSelected) {
+      transformerRef.current.nodes([imageRef.current]);
+      transformerRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
+  useEffect(() => {
+    if (didTouchStage) {
+      selectHandler(false);
+    }
+  }, [didTouchStage]);
   return (
     <>
       <Image
