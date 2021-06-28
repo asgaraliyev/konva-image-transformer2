@@ -17,12 +17,7 @@ export default function App() {
       height={window.innerHeight}
     >
       <Layer>
-        <ImageTransformer
-          url={imageUrl}
-          width={100}
-          height={100}
-          isSelected={true}
-        />
+        <ImageTransformer url={imageUrl} width={100} height={100} />
       </Layer>
     </Stage>
   );
