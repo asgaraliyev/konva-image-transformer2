@@ -1,0 +1,19 @@
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+@mixin grid-center {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+@mixin input {
+  outline: none;
+  padding: 0.5em 0em;
+  &:focus {
+    border: 1px solid white;
+  }
+}

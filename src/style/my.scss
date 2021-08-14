@@ -1,0 +1,87 @@
+@import "mixin.scss";
+.float-left {
+  float: left;
+  left: 0;
+}
+
+.float-right {
+  float: right;
+  right: 0;
+}
+.flex-center {
+  @include flex-center;
+}
+.grid-center {
+  @include grid-center;
+}
+.flex-row {
+  @include flex-center;
+  flex-direction: row;
+}
+.flex-column {
+  @include flex-center;
+  flex-direction: column;
+}
+
+.margin-one {
+  margin: 1em;
+}
+.padding-one {
+  margin: 1em;
+}
+.margin-zero {
+  margin: 0;
+}
+.padding-zero {
+  padding: 0;
+}
+.space-around {
+  justify-content: space-around;
+}
+.space-between {
+  justify-content: space-between;
+}
+.height-hundred {
+  height: 100%;
+}
+.width-hundred {
+  width: 100%;
+}
+.bold {
+  font-weight: bold;
+}
+.pointer {
+  cursor: pointer;
+}
+
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.bg-main {
+  background: #2f4050 !important;
+  outline: none;
+  border: #2f4050 !important;
+  & > * {
+    color: white;
+  }
+  &:hover {
+    color: white !important;
+    & > * {
+      color: white !important;
+    }
+  }
+  &::placeholder {
+    color: white !important;
+  }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -12,6 +12,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
+import * as help from "../helper";
+import UploadImage from "./UploadImage";
 import { useSelector, useDispatch } from "react-redux";
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginLeft: theme.spacing(2),
+    color: "white",
     flex: 1
   }
 }));
@@ -29,54 +32,108 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function FullScreenDialog() {
   const classes = useStyles();
-  // const isActive = useSelector((state) => state.active);
+  const dialogReducer = useSelector((state) => state.DialogReducer);
+  const { active } = dialogReducer;
   const dispatch = useDispatch();
-
   const handleClose = () => {
     dispatch({
-      type: "toggle",
+      type: "TOGGLE_DIALOG",
       currentComponentName: null,
       active: false
     });
   };
-
-  return (
-    <Dialog
-      fullScreen
-      open={false}
-      onClose={handleClose}
-      TransitionComponent={Transition}
-    >
-      <AppBar className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Sound
-          </Typography>
+  const components = [
+    {
+      name: "ADD",
+      title: "Add component",
+      rightButton() {
+        return (
           <Button autoFocus color="inherit" onClick={handleClose}>
-            save
+            Add
           </Button>
-        </Toolbar>
-      </AppBar>
-      <List>
-        <ListItem button>
-          <ListItemText primary="Phone ringtone" secondary="Titania" />
-        </ListItem>
-        <Divider />
-        <ListItem button>
-          <ListItemText
-            primary="Default notification ringtone"
-            secondary="Tethys"
-          />
-        </ListItem>
-      </List>
-    </Dialog>
+        );
+      },
+      main() {
+        return (
+          <>
+            <ListItem button>
+              <ListItemText
+                onClick={() => {
+                  dispatch({
+                    type: "TOGGLE_DIALOG",
+                    active: true,
+                    currentComponentName: "ADD_IMAGE"
+                  });
+                }}
+                primary="Image"
+                secondary="Add a image"
+              />
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText primary="Text" secondary="Add a text" />
+            </ListItem>
+            <Divider />
+          </>
+        );
+      }
+    },
+    {
+      name: "ADD_IMAGE",
+      title: "Add new image",
+      main() {
+        return <UploadImage />;
+      },
+      rightButton() {
+        return (
+          <Button
+            autoFocus
+            color="inherit"
+            onClick={() => {
+              help.saveNewItem();
+            }}
+          >
+            Add Image
+          </Button>
+        );
+      }
+    }
+  ];
+  const [element, setElement] = useState(null);
+  useEffect(() => {
+    const element = components.find(
+      (element) => element.name === dialogReducer.currentComponentName
+    );
+    if (element) setElement(element);
+  }, [dialogReducer.currentComponentName]);
+  return (
+    <>
+      {element && (
+        <Dialog
+          fullScreen
+          open={active}
+          onClose={handleClose}
+          TransitionComponent={Transition}
+        >
+          <AppBar className={classes.appBar}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleClose}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+              <Typography variant="h6" className={classes.title}>
+                {element.title}
+              </Typography>
+              {element.rightButton()}
+            </Toolbar>
+          </AppBar>
+          <List>{element.main()}</List>
+        </Dialog>
+      )}
+    </>
   );
 }

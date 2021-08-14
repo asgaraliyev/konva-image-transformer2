@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Stage, Layer } from "react-konva";
-import "./style.scss";
+import "./style/style.scss";
+import "./style/my.scss";
 import "antd/dist/antd.css";
 import ImageTransformer from "./components/ImageTransformer";
 import Footer from "./components/Footer";
 import Dialog from "./components/Dialog";
+import { useSelector } from "react-redux";
 export default function App() {
   const [didTouchStage, setDidTouchStage] = useState(false);
   const imageUrl =
@@ -13,6 +15,7 @@ export default function App() {
     const didTouchStage = e.target === e.target.getStage();
     setDidTouchStage(didTouchStage);
   }
+  const items = useSelector((state) => state.Items);
   return (
     <>
       <Dialog />
@@ -20,25 +23,24 @@ export default function App() {
         onMouseDown={checkDeselect}
         onTouchStart={checkDeselect}
         width={window.innerWidth}
-        height={window.innerHeight - 40}
+        height={window.innerHeight - 100}
       >
         <Layer>
-          <ImageTransformer
-            url={imageUrl}
-            didTouchStage={didTouchStage}
-            width={100}
-            height={100}
-            x={300}
-            y={30}
-          />
-          <ImageTransformer
-            url={imageUrl}
-            didTouchStage={didTouchStage}
-            x={100}
-            y={200}
-            width={100}
-            height={100}
-          />
+          {items.map((item) => {
+            if (item?.item_type === "IMAGE") {
+              return (
+                <ImageTransformer
+                  key={item?.id}
+                  url={item?.image_url}
+                  didTouchStage={didTouchStage}
+                  width={item?.size[0]}
+                  height={item?.size[1]}
+                  x={300}
+                  y={30}
+                />
+              );
+            }
+          })}
         </Layer>
       </Stage>
       <Footer />
